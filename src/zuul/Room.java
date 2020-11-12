@@ -1,5 +1,7 @@
 package zuul;
 
+import java.util.HashMap;
+
 /**
  * Class Room - a room in an adventure game.
  *
@@ -16,11 +18,8 @@ package zuul;
  */
 public class Room 
 {
-    public String description;
-    public Room northExit;
-    public Room southExit;
-    public Room eastExit;
-    public Room westExit;
+    private String description;
+    private HashMap<String, Room> exits;
 
     /**
      * Create a room described "description". Initially, it has
@@ -28,29 +27,40 @@ public class Room
      * "an open court yard".
      * @param description The room's description.
      */
-    public Room(String description) 
+    public Room(String description)
     {
         this.description = description;
+        exits = new HashMap<>();
+    }
+
+
+    public Room getExit(String direction) {
+        return exits.get(direction);
     }
 
     /**
-     * Define the exits of this room.  Every direction either leads
-     * to another room or is null (no exit there).
-     * @param north The north exit.
-     * @param east The east east.
-     * @param south The south exit.
-     * @param west The west exit.
+     * Retorna uma descrição das saídas da sala
+     * por exemplo: Saidas: norte oeste
+     * @return String com a descrição das saídas da sala
      */
-    public void setExits(Room north, Room east, Room south, Room west) 
-    {
-        if(north != null)
-            northExit = north;
-        if(east != null)
-            eastExit = east;
-        if(south != null)
-            southExit = south;
-        if(west != null)
-            westExit = west;
+    public String getExitString() {
+        String exitString = "Saídas:";
+        // para cada direção (string representando a direção)
+        // no conjunto de chaves do hashmap (keySet) faça
+        for(String exit : exits.keySet()) {
+            exitString += " " + exit;
+        }
+
+        return exitString;
+    }
+
+    /**
+     * Define uma saída para esta sala
+     * @param direction Uma string representando a direção da saída
+     * @param neighbor O objeto de Room (sala) que é adjacente na direção especificada
+     */
+    public void setExit(String direction, Room neighbor) {
+        exits.put(direction, neighbor);
     }
 
     /**
